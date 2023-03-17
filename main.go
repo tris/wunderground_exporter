@@ -23,139 +23,140 @@ var (
 )
 
 func newWeatherMetrics() map[string]*prometheus.GaugeVec {
+	labels := []string{"stationID", "neighborhood", "softwareType", "country"}
 	return map[string]*prometheus.GaugeVec{
 		"temperature": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_temp",
 				Help: "Air temperature in degrees Celsius",
 			},
-			[]string{"station_id", "neighborhood", "software_type", "country"},
+			labels,
 		),
 		"dewpoint": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_dewpt",
 				Help: "Dew point temperature in degrees Celsius",
 			},
-			[]string{"station_id", "neighborhood", "software_type", "country"},
+			labels,
 		),
 		"humidity": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_humidity",
 				Help: "Relative humidity in percentage",
 			},
-			[]string{"station_id", "neighborhood", "software_type", "country"},
+			labels,
 		),
 		"pressure": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_pressure",
 				Help: "Atmospheric pressure at sea level in hectopascals",
 			},
-			[]string{"station_id", "neighborhood", "software_type", "country"},
+			labels,
 		),
 		"windspeed": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_windSpeed",
 				Help: "Wind speed in meters per second",
 			},
-			[]string{"station_id", "neighborhood", "software_type", "country"},
+			labels,
 		),
 		"winddirection": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_windDir",
 				Help: "Wind direction in degrees",
 			},
-			[]string{"station_id", "neighborhood", "software_type", "country"},
+			labels,
 		),
 		"windgust": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_windGust",
 				Help: "Wind gust speed in meters per second",
 			},
-			[]string{"station_id", "neighborhood", "software_type", "country"},
+			labels,
 		),
 		"precipitation_rate": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_precipRate",
 				Help: "Precipitation rate in millimeters per hour",
 			},
-			[]string{"station_id", "neighborhood", "software_type", "country"},
+			labels,
 		),
 		"precipitation_total": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_precipTotal",
 				Help: "Total accumulated precipitation in millimeters",
 			},
-			[]string{"station_id", "neighborhood", "software_type", "country"},
+			labels,
 		),
 		"uv_index": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_uv",
 				Help: "Ultraviolet Index",
 			},
-			[]string{"station_id", "neighborhood", "software_type", "country"},
+			labels,
 		),
 		"solar_radiation": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_solarRadiation",
 				Help: "Solar radiation in watts per square meter",
 			},
-			[]string{"station_id", "neighborhood", "software_type", "country"},
+			labels,
 		),
 		"epoch": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_epoch",
 				Help: "Epoch time in seconds",
 			},
-			[]string{"station_id", "neighborhood", "software_type", "country"},
+			labels,
 		),
 		"visibility": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_visibility",
 				Help: "Visibility in meters",
 			},
-			[]string{"station_id", "neighborhood", "software_type", "country"},
+			labels,
 		),
 		"soil_temperature": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_soilTemp",
 				Help: "Soil temperature in degrees Celsius",
 			},
-			[]string{"station_id", "neighborhood", "software_type", "country"},
+			labels,
 		),
 		"soil_moisture": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_soilMoisture",
 				Help: "Soil moisture in percentage",
 			},
-			[]string{"station_id", "neighborhood", "software_type", "country"},
+			labels,
 		),
 		"windchill": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_windChill",
 				Help: "Wind chill temperature in degrees Celsius",
 			},
-			[]string{"station_id", "neighborhood", "software_type", "country"},
+			labels,
 		),
 		"elevation": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_elevation",
 				Help: "Elevation in meters",
 			},
-			[]string{"station_id", "neighborhood", "software_type", "country"},
+			labels,
 		),
 		"latitude": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_latitude",
 				Help: "Latitude",
 			},
-			[]string{"station_id", "neighborhood", "software_type", "country"},
+			labels,
 		),
 		"longitude": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_longitude",
 				Help: "Longitude",
 			},
-			[]string{"station_id", "neighborhood", "software_type", "country"},
+			labels,
 		),
 	}
 }
