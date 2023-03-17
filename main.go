@@ -7,13 +7,10 @@ import (
 	"log"
 	"net/http"
 	"os"
-	//	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	//	"github.com/tidwall/gjson"
-	//	"github.com/kr/pretty"
 )
 
 const (
@@ -23,8 +20,10 @@ const (
 
 var (
 	apiKey = os.Getenv("WU_API_KEY")
+)
 
-	weatherMetrics = map[string]*prometheus.GaugeVec{
+func newWeatherMetrics() map[string]*prometheus.GaugeVec {
+	return map[string]*prometheus.GaugeVec{
 		"temperature": prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "wunderground_temp",
@@ -159,7 +158,7 @@ var (
 			[]string{"station_id", "neighborhood", "software_type", "country"},
 		),
 	}
-)
+}
 
 type WeatherObservation struct {
 	Observations []struct {
@@ -203,12 +202,6 @@ type WeatherData struct {
 	SoftwareType string
 	Country      string
 	Sensors      map[string]float64
-}
-
-func init() {
-	for _, metric := range weatherMetrics {
-		prometheus.MustRegister(metric)
-	}
 }
 
 func fetchWeatherData(stationID string) (WeatherData, error) {
@@ -265,7 +258,8 @@ func fetchWeatherData(stationID string) (WeatherData, error) {
 
 func main() {
 	router := mux.NewRouter()
-	router.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/metrics", promhttp.HandlerFor(prometheus.DefaultGatherer, promhttp.HandlerOpts{}).ServeHTTP)
+	router.HandleFunc("/scrape", func(w http.ResponseWriter, r *http.Request) {
 		stationID := r.URL.Query().Get("station_id")
 		if stationID == "" {
 			http.Error(w, "station_id query parameter is required", http.StatusBadRequest)
@@ -278,13 +272,19 @@ func main() {
 			return
 		}
 
+		registry := prometheus.NewRegistry()
+		weatherMetrics := newWeatherMetrics()
+		for _, metric := range weatherMetrics {
+			registry.MustRegister(metric)
+		}
+
 		for sensor, value := range weatherData.Sensors {
 			if metric, ok := weatherMetrics[sensor]; ok {
 				metric.WithLabelValues(stationID, weatherData.Neighborhood, weatherData.SoftwareType, weatherData.Country).Set(value)
 			}
 		}
 
-		promhttp.Handler().ServeHTTP(w, r)
+		promhttp.HandlerFor(registry, promhttp.HandlerOpts{}).ServeHTTP(w, r)
 	})
 
 	port := os.Getenv("PORT")
