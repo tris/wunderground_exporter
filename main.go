@@ -15,7 +15,7 @@ import (
 
 const (
 	defaultPort        = "9122"
-	weatherAPIEndpoint = "https://api.weather.com/v2/pws/observations/current?stationId=%s&format=json&apiKey=%s&units=m"
+	weatherAPIEndpoint = "https://api.weather.com/v2/pws/observations/current?stationId=%s&format=json&apiKey=%s&units=m&numericPrecision=decimal"
 )
 
 var (
@@ -176,19 +176,19 @@ type WeatherObservation struct {
 		Epoch             int         `json:"epoch"`
 		UV                float64     `json:"uv"`
 		WindDir           int         `json:"winddir"`
-		Humidity          int         `json:"humidity"`
+		Humidity          float64     `json:"humidity"`
 		QCStatus          int         `json:"qcStatus"`
 		Metric            struct {
-			Temp        int     `json:"temp"`
-			HeatIndex   int     `json:"heatIndex"`
-			DewPt       int     `json:"dewpt"`
-			WindChill   int     `json:"windChill"`
-			WindSpeed   int     `json:"windSpeed"`
-			WindGust    int     `json:"windGust"`
+			Temp        float64 `json:"temp"`
+			HeatIndex   float64 `json:"heatIndex"`
+			DewPt       float64 `json:"dewpt"`
+			WindChill   float64 `json:"windChill"`
+			WindSpeed   float64 `json:"windSpeed"`
+			WindGust    float64 `json:"windGust"`
 			Pressure    float64 `json:"pressure"`
 			PrecipRate  float64 `json:"precipRate"`
 			PrecipTotal float64 `json:"precipTotal"`
-			Elev        int     `json:"elev"`
+			Elev        float64 `json:"elev"`
 		} `json:"metric"`
 	} `json:"observations"`
 }
@@ -198,7 +198,7 @@ type WeatherData struct {
 	Epoch        int
 	Latitude     float64
 	Longitude    float64
-	Elevation    int
+	Elevation    float64
 	Neighborhood string
 	SoftwareType string
 	Country      string
@@ -240,13 +240,13 @@ func fetchWeatherData(stationID string) (WeatherData, error) {
 		SoftwareType: obs.SoftwareType,
 		Country:      obs.Country,
 		Sensors: map[string]float64{
-			"temperature":         float64(obs.Metric.Temp),
-			"dewpoint":            float64(obs.Metric.DewPt),
-			"humidity":            float64(obs.Humidity),
+			"temperature":         obs.Metric.Temp,
+			"dewpoint":            obs.Metric.DewPt,
+			"humidity":            obs.Humidity,
 			"pressure":            obs.Metric.Pressure,
-			"windspeed":           float64(obs.Metric.WindSpeed),
+			"windspeed":           obs.Metric.WindSpeed,
 			"winddirection":       float64(obs.WindDir),
-			"windgust":            float64(obs.Metric.WindGust),
+			"windgust":            obs.Metric.WindGust,
 			"precipitation_rate":  obs.Metric.PrecipRate,
 			"precipitation_total": obs.Metric.PrecipTotal,
 			"uv_index":            obs.UV,
